@@ -1,0 +1,20 @@
+---
+apiVersion: v2
+name: act-runner
+description: This chart can be used to deploy Act Runners for Gitea.
+home: https://github.com/gringolito/act-runner-helm/charts/act-runner
+sources:
+  - https://github.com/gringolito/act-runner-helm/charts/act-runner
+keywords:
+  - gitea
+  - actions
+  - act-runner
+  - act_runner
+  - cicd
+maintainers:
+  - name: Filipe Utzig
+    email: filipe@gringolito.com
+    url: https://github.com/gringolito
+type: application
+version: 0.1.0
+appVersion: 0.2.11

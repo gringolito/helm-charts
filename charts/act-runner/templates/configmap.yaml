@@ -1,0 +1,13 @@
+{{- if .Values.runner.config.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "act_runner.configMap" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{ include "act_runner.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ tpl (toYaml .Values.runner.config.data) . | sha256sum }}
+data:
+  config.yaml: |-
+    {{- tpl .Values.runner.config.data . | nindent 4 }}
+{{- end }}

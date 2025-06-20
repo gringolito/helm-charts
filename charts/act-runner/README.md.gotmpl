@@ -1,0 +1,20 @@
+# Helm chart for Gitea Act Runner
+
+{{ template "chart.description" . }}
+
+{{ template "chart.badgesSection" . }}
+
+## Installing the Chart
+
+To install the chart with the release name `{{ template "chart.name" . }}`
+
+```console
+$ helm repo add gringolito https://gringolito.github.io/helm-charts
+$ helm install {{ template "chart.name" . }} gringolito/{{ template "chart.name" . }}
+```
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.valuesSection" . }}

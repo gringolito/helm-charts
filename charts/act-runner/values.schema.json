@@ -1,0 +1,302 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "affinity": {
+            "description": "Affinity and anti-affinity rules for runner pod scheduling. [Affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).",
+            "type": "object"
+        },
+        "autoscaling": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "description": "Enable horizontal pod autoscaling.",
+                    "type": "boolean"
+                },
+                "maxReplicas": {
+                    "description": "Maximum number of replicas.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "minReplicas": {
+                    "description": "Minimum number of replicas.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "targetCPUUtilizationPercentage": {
+                    "description": "Target CPU utilization percentage for scaling.",
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 0
+                },
+                "targetMemoryUtilizationPercentage": {
+                    "description": "Target memory utilization percentage for scaling.",
+                    "type": "integer",
+                    "maximum": 100,
+                    "minimum": 0
+                }
+            }
+        },
+        "env": {
+            "description": "Define environment variables for the runner container.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "envFrom": {
+            "description": "Define environment variables from existing ConfigMap or Secret data.",
+            "type": "array"
+        },
+        "extraContainers": {
+            "description": "Additional sidecar containers to run alongside the runner container.",
+            "type": "array"
+        },
+        "extraVolumeMounts": {
+            "description": "Additional volume mounts for the runner container.",
+            "type": "array"
+        },
+        "extraVolumes": {
+            "description": "Additional volumes to attach to the runner pods.",
+            "type": "array"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "commonLabels": {
+                    "description": "Apply labels to all resources.",
+                    "type": "object"
+                },
+                "fullnameOverride": {
+                    "description": "Override the fully qualified app name.",
+                    "type": "string"
+                },
+                "nameOverride": {
+                    "description": "Override the name of the app.",
+                    "type": "string"
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Specify the image name to use (relative to `image.repository`).",
+                    "type": "string"
+                },
+                "pullPolicy": {
+                    "description": "Specify the image pull policy. Valid values are `Always`, `Never`, `IfNotPresent`. [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy).",
+                    "type": "string"
+                },
+                "pullSecrets": {
+                    "description": "Specify the image pull secrets if pulling from private registry [imagePullSecrets](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).",
+                    "type": "array"
+                },
+                "repository": {
+                    "description": "Specify the image repository to use.",
+                    "type": "string"
+                },
+                "tag": {
+                    "description": "Overrides the image tag whose default is the chart appVersion.",
+                    "type": "string"
+                }
+            }
+        },
+        "initContainers": {
+            "description": "Init containers to run before the main runner container.",
+            "type": "array"
+        },
+        "lifecycle": {
+            "description": "Lifecycle hooks for the runner container. [Lifecycle](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).",
+            "type": "object"
+        },
+        "livenessProbe": {
+            "description": "Liveness probe configuration for the runner container. [LivenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes).",
+            "type": "object"
+        },
+        "nodeSelector": {
+            "description": "Node selector for scheduling runner pods on specific nodes. [nodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).",
+            "type": "object"
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "accessModes": {
+                    "description": "Access modes for the PersistentVolumeClaim.",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "Enable persistent storage for runner data.",
+                    "type": "boolean"
+                },
+                "existingClaim": {
+                    "description": "Name of an existing PersistentVolumeClaim to use instead of creating a new one.",
+                    "type": "string"
+                },
+                "mountPath": {
+                    "description": "Path inside the container where the volume will be mounted.",
+                    "type": "string"
+                },
+                "selector": {
+                    "description": "Label selectors for the PersistentVolumeClaim.",
+                    "type": "object"
+                },
+                "size": {
+                    "description": "Size of the PersistentVolumeClaim.",
+                    "type": "string"
+                },
+                "storageClassName": {
+                    "description": "Storage class name for the PersistentVolumeClaim.",
+                    "type": "string"
+                }
+            }
+        },
+        "podAnnotations": {
+            "description": "Annotations to add to the runner pods.",
+            "type": "object"
+        },
+        "podLabels": {
+            "description": "Labels to add to the runner pods.",
+            "type": "object"
+        },
+        "podPriorityClassName": {
+            "description": "Priority class name for the runner pods. [priorityClassName](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass).",
+            "type": "string"
+        },
+        "podSecurityContext": {
+            "description": "Pod security context configuration. Only applied when using rootless container. [PodSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).",
+            "type": "object",
+            "properties": {
+                "fsGroup": {
+                    "type": "integer"
+                }
+            }
+        },
+        "readinessProbe": {
+            "description": "Readiness probe configuration for the runner container. [ReadinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes).",
+            "type": "object"
+        },
+        "replicas": {
+            "description": "Number of runner replicas. Only one replica is supported as runner doesn't support clustering.",
+            "type": "string",
+            "maximum": 1,
+            "minimum": 1
+        },
+        "resources": {
+            "description": "Resource requests and limits for the runner container. [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).",
+            "type": "object"
+        },
+        "runner": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "description": "Specify runner's custom configuration in YAML format.",
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "description": "Enable custom configuration for the runner deployment.",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "dockerDind": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "description": "Enable Docker in Docker with root user.",
+                            "type": "boolean"
+                        },
+                        "image": {
+                            "description": "Docker DinD image repository and tag.",
+                            "type": "string"
+                        }
+                    }
+                },
+                "instanceURL": {
+                    "description": "Gitea instance URL where the runner will register.",
+                    "type": "string"
+                },
+                "token": {
+                    "type": "object",
+                    "properties": {
+                        "fromSecret": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "description": "Specify the key in the secret that contains the Runner registration token.",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "Specify the secret name containing the Runner registration token.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "value": {
+                            "description": "Set the Runner registration token value. If existing secret is specified this value is not used.",
+                            "type": "string"
+                        }
+                    }
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Specify the deployment used to replace old Pods by new ones valid options are `RollingUpdate`, `Recreate`. [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)",
+                            "type": "string",
+                            "enum": [
+                                "RollingUpdate",
+                                "Recreate"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "securityContext": {
+            "description": "Security context configuration for the runner container. [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).",
+            "type": "object"
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "description": "Annotations to add to the service account.",
+                    "type": "object"
+                },
+                "create": {
+                    "description": "Specifies whether a service account should be created.",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "The name of the service account to use. If not set and create is true, a name is generated using the fullname template.",
+                    "type": "string"
+                }
+            }
+        },
+        "terminationGracePeriodSeconds": {
+            "description": "Termination grace period in seconds for the runner pods.",
+            "type": "integer",
+            "minimum": 0
+        },
+        "tolerations": {
+            "description": "Tolerations for scheduling runner pods on nodes with taints. [Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).",
+            "type": "array"
+        },
+        "topologySpreadConstraints": {
+            "description": "Topology spread constraints for distributing runner pods across zones/nodes. [TopologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).",
+            "type": "array"
+        }
+    }
+}
