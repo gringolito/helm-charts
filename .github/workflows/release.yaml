@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ vars.HELM_RELEASE_GIT_EMAIL }}"
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1
         with:
