@@ -4,10 +4,10 @@ name: Release Helm Chart
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   helm-release:
