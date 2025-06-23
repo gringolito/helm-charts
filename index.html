@@ -1,0 +1,160 @@
+---
+---
+<html>
+<head>
+  <title>Index of /</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="m-2 lg:m-4">
+    <span id="path" class="font-bold tracking-wide text-2xl text-gray-700">Index of /</span>
+  </div>
+  <div class="overflow-x-auto relative shadow-md sm:rounded-lg m-2 lg:m-4">
+    <table id="fileTable" class="w-full text-sm text-left text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-pointer">
+        <tr>
+          <th class="py-3 px-6" data-sort="name">
+            <span class="flex items-center space-x-2">
+              <span>Name</span>
+              <span class="sort-icon text-gray-400">↕</span>
+            </span>
+          </th>
+          <th class="py-3 px-6" data-sort="size">
+            <span class="flex items-center space-x-2">
+              <span>Size</span>
+              <span class="sort-icon text-gray-400">↕</span>
+            </span>
+          </th>
+          <th class="py-3 px-6" data-sort="date">
+            <span class="flex items-center space-x-2">
+              <span>Last Modified</span>
+              <span class="sort-icon text-gray-400">↕</span>
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="fileTableBody">
+        {% assign files_by_dir = site.static_files | group_by_exp:"file", "file.path | split: '/' | slice: 0, -1 | join: '/'" %}
+        {% for group in files_by_dir %}
+          {% assign dir = group.name %}
+          {% for file in group.items %}
+            <tr class="bg-white border-b hover:bg-gray-50" data-path="{{ file.path }}" data-name="{{ file.name }}" data-modified="{{ file.modified_time | date: '%Y-%m-%dT%H:%M:%S' }}">
+              <td class="py-2 px-2 lg:px-6 font-medium text-gray-900 whitespace-nowrap flex align-middle">
+                <a class="my-auto text-blue-700" href="{{ file.path | prepend: site.baseurl }}">{{ file.name }}</a>
+              </td>
+              <td class="filesize">Loading...</td>
+              <td>{{ file.modified_time | date: "%-d %b %Y %H:%M:%S" }}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <footer>
+    <p class="m-2 lg:m-4 text-sm">© 2025 <a href="https://github.com/gringolito/helm-charts"
+        target="_blank" class="text-blue-700">Filipe Utzig</a> – Served by GitHub Pages</p>
+  </footer>
+
+  <script>
+    // Format byte size
+    function humanFileSize(bytes) {
+      const thresh = 1024;
+      if (Math.abs(bytes) < thresh) return bytes + ' B';
+      const units = ['KB', 'MB', 'GB', 'TB'];
+      let u = -1;
+      do {
+        bytes /= thresh;
+        ++u;
+      } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+      return bytes.toFixed(1) + ' ' + units[u];
+    }
+
+    // Fetch file sizes using HEAD
+    async function fetchFileSizes() {
+      const rows = document.querySelectorAll('tr[data-path]');
+      for (const row of rows) {
+        const path = row.getAttribute('data-path');
+        try {
+          const response = await fetch(path, { method: 'HEAD' });
+          const size = response.headers.get('Content-Length');
+          if (size) {
+            row.querySelector('.filesize').innerText = humanFileSize(parseInt(size));
+            row.setAttribute('data-size', size);
+          } else {
+            row.querySelector('.filesize').innerText = '—';
+            row.setAttribute('data-size', 0);
+          }
+        } catch (e) {
+          row.querySelector('.filesize').innerText = 'Error';
+          row.setAttribute('data-size', 0);
+        }
+      }
+    }
+
+    // Sort function
+    function sortTableBy(column, type) {
+      const tbody = document.getElementById('fileTableBody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const currentSort = tbody.getAttribute('data-sort');
+      const currentDir = tbody.getAttribute('data-dir') || 'asc';
+      const direction = currentSort === column && currentDir === 'asc' ? -1 : 1;
+      const newDir = direction === 1 ? 'asc' : 'desc';
+      tbody.setAttribute('data-sort', column);
+      tbody.setAttribute('data-dir', newDir);
+
+      // Sort rows
+      rows.sort((a, b) => {
+        let valA, valB;
+        switch (type) {
+          case 'name':
+            valA = a.getAttribute('data-name').toLowerCase();
+            valB = b.getAttribute('data-name').toLowerCase();
+            break;
+          case 'size':
+            valA = parseInt(a.getAttribute('data-size') || '0');
+            valB = parseInt(b.getAttribute('data-size') || '0');
+            break;
+          case 'date':
+            valA = new Date(a.getAttribute('data-modified'));
+            valB = new Date(b.getAttribute('data-modified'));
+            break;
+        }
+        if (valA < valB) return -1 * direction;
+        if (valA > valB) return 1 * direction;
+        return 0;
+      });
+
+      // Re-render
+      rows.forEach(row => tbody.appendChild(row));
+
+      // Update sort icons
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        const icon = th.querySelector('.sort-icon');
+        const thCol = th.getAttribute('data-sort');
+        if (thCol === column) {
+          icon.classList.remove('text-gray-400');
+          icon.classList.add('text-black');
+          icon.innerText = direction === 1 ? '▲' : '▼';
+        } else {
+          icon.classList.remove('text-black');
+          icon.classList.add('text-gray-400');
+          icon.innerText = '↕';
+        }
+      });
+    }
+
+    // Column click sorting
+    document.querySelectorAll('th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const sortType = th.getAttribute('data-sort');
+        sortTableBy(sortType, sortType);
+      });
+    });
+
+    // Init
+    document.getElementById('path').innerText = "Index of " + window.location.pathname;
+    fetchFileSizes();
+  </script>
+</body>
+</html>
