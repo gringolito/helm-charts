@@ -100,18 +100,6 @@ act-runner-token
 {{- end -}}
 
 {{/*
-Helper template to determine the persistent volume claim for the act_runner pod.
-Usage: {{ include "act_runner.claimName" . }}
-*/}}
-{{- define "act_runner.claimName" -}}
-{{- if .Values.persistence.existingClaim -}}
-{{ .Values.persistence.existingClaim }}
-{{- else -}}
-{{ include "act_runner.fullname" . }}-pvc
-{{- end -}}
-{{- end -}}
-
-{{/*
 Helper template to determine the configMap for the act_runner pod.
 Usage: {{ include "act_runner.configMap" . }}
 */}}

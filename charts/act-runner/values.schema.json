@@ -137,10 +137,6 @@
                     "description": "Enable persistent storage for runner data.",
                     "type": "boolean"
                 },
-                "existingClaim": {
-                    "description": "Name of an existing PersistentVolumeClaim to use instead of creating a new one.",
-                    "type": "string"
-                },
                 "mountPath": {
                     "description": "Path inside the container where the volume will be mounted.",
                     "type": "string"
@@ -185,9 +181,8 @@
             "type": "object"
         },
         "replicas": {
-            "description": "Number of runner replicas. Only one replica is supported as runner doesn't support clustering.",
-            "type": "string",
-            "maximum": 1,
+            "description": "Number of runner replicas.",
+            "type": "integer",
             "minimum": 1
         },
         "resources": {
@@ -253,11 +248,11 @@
                     "type": "object",
                     "properties": {
                         "type": {
-                            "description": "Specify the deployment used to replace old Pods by new ones valid options are `RollingUpdate`, `Recreate`. [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)",
+                            "description": "Specify the update strategy used to replace old Pods by new ones valid options are `RollingUpdate`, `OnDelete`. [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)",
                             "type": "string",
                             "enum": [
                                 "RollingUpdate",
-                                "Recreate"
+                                "OnDelete"
                             ]
                         }
                     }
