@@ -16,7 +16,7 @@ jobs:
           ref: gh-pages
 
       - name: Generate Directory Listings
-        uses: jayanta525/github-pages-directory-listing@v4
+        uses: jayanta525/github-pages-directory-listing@v4.0.0
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
