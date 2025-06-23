@@ -25,9 +25,9 @@ image:
 
 runner:
   updateStrategy:
-    # -- Specify the deployment used to replace old Pods by new ones valid options are `RollingUpdate`, `Recreate`.
-    # [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
-    type: RollingUpdate  # @schema enum:[RollingUpdate, Recreate]
+    # -- Specify the update strategy used to replace old Pods by new ones valid options are `RollingUpdate`, `OnDelete`.
+    # [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)
+    type: RollingUpdate  # @schema enum:[RollingUpdate, OnDelete]
 
   # Docker in Docker configuration for running Docker commands inside the runner.
   dockerDind:
@@ -83,8 +83,6 @@ env:
 persistence:
   # -- Enable persistent storage for runner data.
   enabled: true
-  # -- Name of an existing PersistentVolumeClaim to use instead of creating a new one.
-  existingClaim: ""
   # -- Storage class name for the PersistentVolumeClaim.
   storageClassName: ""
   # -- Access modes for the PersistentVolumeClaim.
@@ -125,8 +123,8 @@ envFrom: []
 #  - secretRef:
 #     name: <SECRET_NAME>
 
-# -- Number of runner replicas. Only one replica is supported as runner doesn't support clustering.
-replicas: "1"  # @schema minimum:1;maximum:1
+# -- Number of runner replicas.
+replicas: 1  # @schema minimum:1
 
 # -- Annotations to add to the runner pods.
 podAnnotations: {}
